@@ -1,0 +1,31 @@
+version: '3.0'
+  
+services:
+  www:
+    build: .
+    ports:
+        - 80:80
+    volumes:
+        - ./www:/var/www/html/
+    networks:
+        - default
+  mysql:
+    image: mysql:8.0
+    volumes:
+    - ./mysql/data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+  phpmyadmin:
+   image: phpmyadmin/phpmyadmin:latest
+   environment:
+   - VIRTUAL_HOST=phpmyadmin.local
+   - PMA_HOST=mysql
+   - PMA_USER=root
+   - PMA_PASSWORD=root
+   - PMA_ARBITRARY=1
+   volumes:
+    - /sessions
+   ports:
+     - 8080:80
