@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\SignupForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -61,9 +62,21 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+//        var_dump(Yii::$app->user->identity); die();
         return $this->render('index');
     }
 
+    public  function actionSignup(){
+        $model = new SignupForm();
+        if (isset($_POST['SignupForm']))
+        {
+            $model ->attributes = Yii::$app->request->post('SignupForm');
+            if ($model->validate() && $model->signup()){
+                return $this->redirect('login');
+            }
+        }
+        return $this ->render('signup',['model'=>$model]);
+    }
     /**
      * Login action.
      *
@@ -71,20 +84,21 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        $model = new User();   // ???
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
-
-        $model->password = '';
-        return $this->render('login', [
-            'model' => $model,
-        ]);
+            $model = new LoginForm();
+            if (Yii::$app->request->post('LoginForm'))
+            {
+                $model->attributes = Yii::$app->request->post('LoginForm');
+                if ($model->validate())
+                {
+                 Yii::$app->user->login($model->getUser());
+                 return $this->goHome();
+//                 var_dump('Валидация успешна'); die();
+                }
+            }
+            return $this->render('login',['model'=>$model]);
     }
 
     /**

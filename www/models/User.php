@@ -5,27 +5,20 @@ namespace app\models;
 
 
 use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
 
-class User extends ActiveRecord
+
+class User extends ActiveRecord implements IdentityInterface
 {
-//    public $id;
-//    public $username;
-//    public $password;
 
     public static function findIdentity($id)
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        return self::findOne($id);
     }
 
     public static function findByUsername($username)
     {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
-
-        return null;
+        return self::findOne($username);
     }
 
     public function getId()
@@ -33,27 +26,29 @@ class User extends ActiveRecord
         return $this->id;
     }
 
+    public function generatePassword($password)
+    {
+        $this->password = sha1($password);
+    }
+
     public function validatePassword($password)
     {
-        return $this->password === $password;
+        return $this->password === sha1($password);
     }
 
-   /**  Мусорные функции которые необходимо убрать,
-
-        пока что сделаю временную заглушку для них.
-   */
-/*    public function validateAuthKey($authKey)
-    {
-        return null ;
-    }
     public function getAuthKey()
     {
-        return null;
+
     }
+
+    public function validateAuthKey($authKey)
+    {
+
+    }
+
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return null;
+
     }
-*/
 
 }

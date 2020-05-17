@@ -2,6 +2,12 @@
 
 namespace app\models;
 
+/*Это старый класс он не используется !!!!!!!!!!!!!!!!!
+    его можно удалить в принципе
+
+
+
+*/
 class User_old extends \yii\base\BaseObject implements \yii\web\IdentityInterface
 {
     public $id;
