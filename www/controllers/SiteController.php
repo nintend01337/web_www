@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\LinkForm;
 use app\models\SignupForm;
 use Yii;
 use yii\filters\AccessControl;
@@ -55,6 +56,14 @@ class SiteController extends Controller
         ];
     }
 
+    public function debuger($content)
+    {
+        echo '<pre>';
+        print_r($content);
+        echo '</pre>'; die();
+    }
+
+
     /**
      * Displays homepage.
      *
@@ -99,6 +108,22 @@ class SiteController extends Controller
                 }
             }
             return $this->render('login',['model'=>$model]);
+    }
+
+    public function actionLink()
+    {
+        if (!Yii::$app->user->isGuest) {
+            $model = new LinkForm();
+            if (isset($_POST['LinkForm'])) {
+                $model->attributes = Yii::$app->request->post('LinkForm');
+                    if ($model->validate() && $model->createLink())
+                    {
+                     $this->debuger($model);
+                    }
+            }
+            return $this->render('link', ['model' => $model]);
+        }
+        else    return $this->actionLogin();
     }
 
     /**

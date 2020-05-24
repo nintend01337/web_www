@@ -23,10 +23,6 @@ class LoginForm extends Model
         ];
     }
 
-        public function login()
-        {
-
-        }
     public function getUser()
     {
         return User::findOne(['username'=>$this->username]);
