@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $form->field($model, 'origin')->textInput(['autofocus' => true]) ?>
 
-<!--    --><?//= $form->field($model, 'short')->textInput() ?>
+    <?= $form->field($model, 'short')->textInput() ?>
 
     <div class="form-group">
         <div class="col-lg-offset-1 col-lg-11">
@@ -31,11 +31,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php ActiveForm::end(); ?>
 
-    <script>
-        $("linkform-origin").change(function(){
+  <?php
+  $js = <<<JS
+        $("form").on('beforeSubmit',function(){
             alert("Hello");
+            return false;
         });
-
-    </script>
+JS;
+?>
 
 </div>

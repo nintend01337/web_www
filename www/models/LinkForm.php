@@ -5,6 +5,7 @@ namespace app\models;
 
 
 use yii\base\Model;
+use Yii;
 use app\models\Link;
 
 class LinkForm extends Model
@@ -34,25 +35,27 @@ class LinkForm extends Model
     public function createLink()
     {
         $link = new Link();
+
+        $link->user_id = Yii::$app->getUser();
         $link->origin = $this->origin;
-        $link->short-> generateShort($this->origin);
-        $link->create_date->getDate();
-        $link->expire_date->getExpireDate($link->create_date);
+        $link->generateShort($this->origin);
+        $link->create_date = getDate();
+     //   $link->getExpireDate($this->expire_date);
      // return $link;
          return $link->save();
     }
 
     protected function getDate()
     {
-        return date("d-m-y");
+        $this->create_date =  date("d-m-y");
     }
 
-    protected function getExpireDate($date)
+    protected function getExpireDate($create_date)
     {
         $date_time = new DateTime();
-        $date_time->add(new \DateInterval('P15D')); // прибавляем 15 дней к дате создания
+        $date_time->add(new \DateInterval('P15D')) ; // прибавляем 15 дней к дате создания
         $date_time->format('d-m-y');
 
-        return $date_time;
+        $this->expire_date =  $date_time;
     }
 }

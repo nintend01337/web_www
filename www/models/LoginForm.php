@@ -12,31 +12,38 @@ use yii\base\Model;
  */
 class LoginForm extends Model
 {
-        public $username;
-        public $password;
+    public $username;
+    public $password;
 
     public function rules()
     {
         return [
-            [['username','password'],'required'],
-            ['password','validatePassword']
+            [['username', 'password'], 'required'],
+            ['password', 'validatePassword']
         ];
     }
 
     public function getUser()
     {
-        return User::findOne(['username'=>$this->username]);
+        return User::findOne(['username' => $this->username]);
     }
-        public function validatePassword ($attribute,$params)
-        {
-            if (!$this->hasErrors())
-            {
-                $user = $this->getUser();
 
-                if (!$user || !$user->validatePassword($this->password) )
-                {
-                    $this->addError($attribute, "Неверный пользователь или пароль");
-                }
+    public function validatePassword($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            $user = $this->getUser();
+
+            if (!$user || !$user->validatePassword($this->password)) {
+                $this->addError($attribute, "Неверный пользователь или пароль");
             }
         }
     }
+
+    public function login()
+    {
+        if ($this->validate()) {
+            return Yii::$app->user->login($this->getUser());
+        }
+        return false;
+    }
+}

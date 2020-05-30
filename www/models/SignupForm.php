@@ -21,7 +21,7 @@ class SignupForm extends Model
     public function signup(){
             $user = new User();
             $user->username = $this->username;
-            $user->generatePassword($this->password);
+            $user->hashPassword($this->password);
 
             return $user->save();
     }

@@ -60,7 +60,8 @@ class SiteController extends Controller
     {
         echo '<pre>';
         print_r($content);
-        echo '</pre>'; die();
+        echo '</pre>';
+        die();
     }
 
 
@@ -75,17 +76,26 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
-    public  function actionSignup(){
+    public function actionSignup()
+    {
         $model = new SignupForm();
-        if (isset($_POST['SignupForm']))
-        {
-            $model ->attributes = Yii::$app->request->post('SignupForm');
-            if ($model->validate() && $model->signup()){
+//        if (isset($_POST['SignupForm']))
+//        {
+//            $model ->attributes = Yii::$app->request->post('SignupForm');
+//            if ($model->validate() && $model->signup()){
+//                return $this->redirect('login');
+//            }
+//        }
+        if ($model->load(Yii::$app->request->post())) {
+            $model->attributes = Yii::$app->request->post('SignupForm');
+            if ($model->validate() && $model->signup())
                 return $this->redirect('login');
-            }
         }
-        return $this ->render('signup',['model'=>$model]);
+
+        //   return $this ->render('signup',['model'=>$model]);
+        return $this->render('signup', compact('model'));
     }
+
     /**
      * Login action.
      *
@@ -96,34 +106,47 @@ class SiteController extends Controller
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-            $model = new LoginForm();
-            if (Yii::$app->request->post('LoginForm'))
-            {
-                $model->attributes = Yii::$app->request->post('LoginForm');
-                if ($model->validate())
-                {
-                 Yii::$app->user->login($model->getUser());
-                 return $this->goHome();
-//                 var_dump('Валидация успешна'); die();
-                }
+        $model = new LoginForm();
+        //переделываем логин
+
+//            if (Yii::$app->request->post('LoginForm'))
+//            {
+//                $model->attributes = Yii::$app->request->post('LoginForm');
+//                if ($model->validate())
+//                {
+//                 Yii::$app->user->login($model->getUser());
+//                 return $this->goHome();
+//                }
+//            }
+        // return $this->render('login',['model'=>$model]);
+
+        //логин не работает так как сломалась валидация пароля
+        //@ref  model/User.php / validatePassword()
+        if ($model->load(Yii::$app->request->post())) {
+            $model->attributes = Yii::$app->request->post('LoginForm');
+            if ($model->validate()) {
+                Yii::$app->user->login($model->getUser());
+                return $this->goHome();
             }
-            return $this->render('login',['model'=>$model]);
+        }
+
+        return $this->render('login', compact('model'));
     }
 
     public function actionLink()
     {
         if (!Yii::$app->user->isGuest) {
             $model = new LinkForm();
-            if (isset($_POST['LinkForm'])) {
+            if ($model->load(Yii::$app->request->post())) {
                 $model->attributes = Yii::$app->request->post('LinkForm');
-                    if ($model->validate() && $model->createLink())
-                    {
-                     $this->debuger($model);
-                    }
+                if ($model->validate() && $model->createLink()) {
+                    // $this->debuger($model);
+
+                }
             }
-            return $this->render('link', ['model' => $model]);
-        }
-        else    return $this->actionLogin();
+            //           return $this->render('link', ['model' => $model]);
+            return $this->render('link', compact('model'));
+        } else    return $this->actionLogin();
     }
 
     /**
