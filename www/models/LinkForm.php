@@ -38,7 +38,7 @@ class LinkForm extends Model
 
         $link->user_id = Yii::$app->getUser();
         $link->origin = $this->origin;
-        $link->generateShort($this->origin);
+        $link->short = Link::generateShort();
         $link->create_date = getDate();
      //   $link->getExpireDate($this->expire_date);
      // return $link;

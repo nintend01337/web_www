@@ -6,6 +6,7 @@ use app\models\LinkForm;
 use app\models\SignupForm;
 use Yii;
 use yii\filters\AccessControl;
+use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
@@ -141,7 +142,7 @@ class SiteController extends Controller
                 $model->attributes = Yii::$app->request->post('LinkForm');
                 if ($model->validate() && $model->createLink()) {
                     // $this->debuger($model);
-
+                    VarDumper::dump($model);die();
                 }
             }
             //           return $this->render('link', ['model' => $model]);

@@ -31,13 +31,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php ActiveForm::end(); ?>
 
-  <?php
-  $js = <<<JS
-        $("form").on('beforeSubmit',function(){
+    <script>
+        $("linkform-origin").change(function(){
             alert("Hello");
-            return false;
         });
-JS;
-?>
+
+    </script>
 
 </div>

@@ -29,13 +29,14 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function hashPassword($password)
     {
-        //  $this->password = sha1($password);
+          $this->password = sha1($password);
 
-        //  $this->password = sha1($password);
         //Вот здесь вылетает ошибка
         // Class 'app\models\Yii' not found
         // upd. Fixed
-        $this->password = Yii::$app->getSecurity()->generatePasswordHash($password);
+        // Пока работает старым методом, и пусть работает
+
+   //     $this->password = Yii::$app->getSecurity()->generatePasswordHash($password);
     }
 
     //Валидация не работает нужным образом т.к в базах хранится ша1 и
@@ -48,8 +49,8 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $hash = $this->hashPassword($password);
 
-//        return $this->password === sha1($password);
-        return Yii::$app->security->validatePassword($password, $this->hash);
+       return $this->password === sha1($password);
+//        return Yii::$app->security->validatePassword($password, $this->hash);
     }
 
     public function getAuthKey()
