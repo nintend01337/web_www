@@ -3,21 +3,29 @@
 namespace app\controllers;
 
 use app\models\LinkForm;
-use app\models\SignupForm;
 use Yii;
 use yii\filters\AccessControl;
-use yii\helpers\VarDumper;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
+
 use app\models\ContactForm;
 
 class SiteController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
+    public function actions()
+    {
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
+        ];
+    }
+
     public function behaviors()
     {
         return [
@@ -42,31 +50,6 @@ class SiteController extends Controller
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
-        ];
-    }
-
-    public function debuger($content)
-    {
-        echo '<pre>';
-        print_r($content);
-        echo '</pre>';
-        die();
-    }
-
-
-    /**
      * Displays homepage.
      *
      * @return string
@@ -77,63 +60,6 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
-    public function actionSignup()
-    {
-        $model = new SignupForm();
-//        if (isset($_POST['SignupForm']))
-//        {
-//            $model ->attributes = Yii::$app->request->post('SignupForm');
-//            if ($model->validate() && $model->signup()){
-//                return $this->redirect('login');
-//            }
-//        }
-        if ($model->load(Yii::$app->request->post())) {
-            $model->attributes = Yii::$app->request->post('SignupForm');
-            if ($model->validate() && $model->signup())
-                return $this->redirect('login');
-        }
-
-        //   return $this ->render('signup',['model'=>$model]);
-        return $this->render('signup', compact('model'));
-    }
-
-    /**
-     * Login action.
-     *
-     * @return Response|string
-     */
-    public function actionLogin()
-    {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-        $model = new LoginForm();
-        //переделываем логин
-
-//            if (Yii::$app->request->post('LoginForm'))
-//            {
-//                $model->attributes = Yii::$app->request->post('LoginForm');
-//                if ($model->validate())
-//                {
-//                 Yii::$app->user->login($model->getUser());
-//                 return $this->goHome();
-//                }
-//            }
-        // return $this->render('login',['model'=>$model]);
-
-        //логин не работает так как сломалась валидация пароля
-        //@ref  model/User.php / validatePassword()
-        if ($model->load(Yii::$app->request->post())) {
-            $model->attributes = Yii::$app->request->post('LoginForm');
-            if ($model->validate()) {
-                Yii::$app->user->login($model->getUser());
-                return $this->goHome();
-            }
-        }
-
-        return $this->render('login', compact('model'));
-    }
-
     public function actionLink()
     {
         if (!Yii::$app->user->isGuest) {
@@ -142,7 +68,7 @@ class SiteController extends Controller
                 $model->attributes = Yii::$app->request->post('LinkForm');
                 if ($model->validate() && $model->createLink()) {
                     // $this->debuger($model);
-                    VarDumper::dump($model);die();
+                //    VarDumper::dump($model,10,true);
                 }
             }
             //           return $this->render('link', ['model' => $model]);

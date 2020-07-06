@@ -2,9 +2,8 @@
 
 
 namespace app\models;
-use yii\base\Model;
-use yii\base\Security;
 use app\models\User;
+use yii\base\Model;
 class SignupForm extends Model
 {
     public $username;
@@ -18,11 +17,19 @@ class SignupForm extends Model
             ['password','string','min'=>4,'max'=>8],
         ];
     }
-    public function signup(){
-            $user = new User();
-            $user->username = $this->username;
-            $user->generatePassword($this->password);
 
-            return $user->save();
+    public function signup(){
+         if ($this->validate())
+         {
+             $user = new User();
+             $user->username = $this->username;
+             $user->hashPassword($this->password);
+
+             if (!$user->save(false)) {
+                 return null;
+             }
+            return $user;
+         }
+            return false;
     }
 }

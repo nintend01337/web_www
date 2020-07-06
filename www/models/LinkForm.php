@@ -7,6 +7,7 @@ namespace app\models;
 use yii\base\Model;
 use Yii;
 use app\models\Link;
+use yii\helpers\VarDumper;
 
 class LinkForm extends Model
 {
@@ -42,7 +43,8 @@ class LinkForm extends Model
         $link->create_date = getDate();
      //   $link->getExpireDate($this->expire_date);
      // return $link;
-         return $link->save();
+        // return $link->save();
+        VarDumper::dump(Yii::$app->getUser(),10,true);
     }
 
     protected function getDate()

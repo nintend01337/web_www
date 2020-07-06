@@ -24,7 +24,7 @@ class m200517_161403_create_link_table extends Migration
         $this->addForeignKey('user-id_user-id_link',
                             '{{%link}}','user_id',
                             '{{%user}}','id',
-                            'CASCADE','CASCADE');
+                            'CASCADE','RESTRICT');
     }
 
     /**
@@ -32,6 +32,8 @@ class m200517_161403_create_link_table extends Migration
      */
     public function safeDown()
     {
+        //сначала ключ потом бд иначе краш
+        $this->dropForeignKey('user-id_user-id_link');
         $this->dropTable('{{%link}}');
     }
 }
