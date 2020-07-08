@@ -2,8 +2,6 @@
 
 
 namespace app\models;
-
-
 use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
@@ -29,13 +27,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function hashPassword($password)
     {
-        //  $this->password = sha1($password);
-
-        //Вот здесь вылетает ошибка
-        // Class 'app\models\Yii' not found
-        // upd. Fixed
-        // Пока работает старым методом, и пусть работает
-
         $this->password = Yii::$app->getSecurity()->generatePasswordHash($password);
     }
 
@@ -47,8 +38,6 @@ class User extends ActiveRecord implements IdentityInterface
 
     public function validatePassword($password)
     {
-        $hash = $this->hashPassword($password);
-
 //       return $this->password === sha1($password);
         return Yii::$app->security->validatePassword($password, $this->password);
     }

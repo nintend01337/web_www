@@ -30,7 +30,7 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::classname(),
                 'only' => ['logout'],
                 'rules' => [
                     [
@@ -41,7 +41,7 @@ class SiteController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::classname(),
                 'actions' => [
                     'logout' => ['post'],
                 ],
@@ -58,34 +58,6 @@ class SiteController extends Controller
     {
 //        var_dump(Yii::$app->user->identity); die();
         return $this->render('index');
-    }
-
-    public function actionLink()
-    {
-        if (!Yii::$app->user->isGuest) {
-            $model = new LinkForm();
-            if ($model->load(Yii::$app->request->post())) {
-                $model->attributes = Yii::$app->request->post('LinkForm');
-                if ($model->validate() && $model->createLink()) {
-                    // $this->debuger($model);
-                //    VarDumper::dump($model,10,true);
-                }
-            }
-            //           return $this->render('link', ['model' => $model]);
-            return $this->render('link', compact('model'));
-        } else    return $this->actionLogin();
-    }
-
-    /**
-     * Logout action.
-     *
-     * @return Response
-     */
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
     }
 
     /**

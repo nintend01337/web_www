@@ -41,9 +41,9 @@ class LinkForm extends Model
         $link->origin = $this->origin;
         $link->short = Link::generateShort();
         $link->create_date = getDate();
-     //   $link->getExpireDate($this->expire_date);
-     // return $link;
-        // return $link->save();
+     //   $_link->getExpireDate($this->expire_date);
+     // return $_link;
+        // return $_link->save();
         VarDumper::dump(Yii::$app->getUser(),10,true);
     }
 

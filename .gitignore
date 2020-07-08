@@ -16,3 +16,7 @@
 /mysql/data/binlog.000001
 /mysql/data/binlog.000002
 /mysql/data/binlog.000003
+mysql
+logs
+.vscode
+/old_files/composer.phar

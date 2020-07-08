@@ -39,17 +39,17 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'Links', 'url' => ['/site/link']],
+            ['label' => 'Links', 'url' => ['/link/index']],
             ['label' => 'About', 'url' => ['/site/about']],
 //          ['label' => 'Contact', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/auth/login']]
             ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
+                  '<li>'
+                . Html::beginForm(['/auth/logout'], 'post')
                 . Html::submitButton(
                     'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
+                    ['class' => 'btn btn-_link logout']
                 )
                 . Html::endForm()
                 . '</li>'
